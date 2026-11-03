@@ -1,8 +1,8 @@
 # Results — Robust Distortion Riskmetrics under Symmetry, Unimodality, and Wasserstein Constraints
 
 **Paper:** Robust distortion riskmetrics under symmetry, unimodality, and Wasserstein constraints  
-**Authors:** Qiuqi Wang, Ruodu Wang, Ricardas Zitikis  
-**Year:** 2024  
+**Authors:** Peng Liu, Yiying Zhang, Baishuai Zuo  
+**Year:** 2026  
 
 This repository reproduces the numerical experiments in Sections 5.1 and 5.2 of the paper. All computations use synthetic reference distributions constructed from prescribed moments (μ = 1, σ = 1); no market data are used.
 
@@ -39,7 +39,7 @@ Dashes (—) indicate infeasibility: the symmetric or symmetric-unimodal class c
 | Lognormal   | 7.242   | 5.472     | 7.040    | 5.224         |
 | Pareto      | 7.246   | 5.472     | 7.078    | 5.226         |
 
-The paper states approximate plateau values for the uniform reference (Section 5.1, implementation notes): general ≈ 7.2, symmetric ≈ 5.5, unimodal ≈ 6.9, symmetric unimodal ≈ 5.2. Our computed values (7.234, 5.472, 7.022, 5.223) lie within 5% of these approximations.  
+The paper states approximate plateau values for the uniform reference (Section 5.1): general ≈ 7.2, symmetric ≈ 5.5, unimodal ≈ 6.9, symmetric unimodal ≈ 5.2. Our computed values (7.234, 5.472, 7.022, 5.223) lie within 5% of these approximations.  
 **Verdict: reproduced.**
 
 The plateau is identical across all four references once reached (all four rows converge to the same values), confirming the paper's claim that beyond the saturation threshold the bound depends only on the moments and shape restrictions.  
@@ -133,7 +133,7 @@ Figures: `exp2_coverage_fig4.png`. Table: `exp2_table2.csv`.
 
 5. **Data source:** No external data source is used. All four reference distributions (uniform, normal, lognormal, Pareto) are constructed analytically with mean 1 and standard deviation 1 as specified in Section 5.1. The sampling distributions for Experiment 2 are generated synthetically as specified in Section 5.2.
 
-6. **Solver:** Clarabel is used for all SOCP problems, as stated in the paper (Section 5, implementation notes).
+6. **Solver:** Clarabel is used for all SOCP problems, as stated in Section 5 of the paper.
 
 ---
 

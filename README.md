@@ -1,12 +1,12 @@
 # Robust distortion riskmetrics under symmetry, unimodality, and Wasserstein constraints
 
-**Authors:** Liu, Zhang, Zuo (2026)
+**Authors:** Peng Liu, Yiying Zhang, Baishuai Zuo (2026)
 
 **Paper link:** No arXiv/DOI link is provided in the paper itself.
 
 ## Overview
 
-This repository replicates the numerical experiments from Liu, Zhang, Zuo (2026):
+This repository replicates the numerical experiments from Liu, Zhang, and Zuo (2026):
 
 - **exp_1** – Fixed-reference worst-case bound comparison (Figs 1–3): computes worst-case ES, RVaR, and VaR across four reference distributions (uniform, normal, lognormal, Pareto) under four uncertainty classes (general, unimodal, symmetric, symmetric-unimodal) over a grid of squared Wasserstein budgets.
 
