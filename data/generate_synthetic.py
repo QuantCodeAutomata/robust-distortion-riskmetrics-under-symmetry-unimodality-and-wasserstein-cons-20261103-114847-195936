@@ -121,9 +121,10 @@ def population_es(dist_name: str, alpha: float = 0.975) -> float:
         es_t5 = stats.t.pdf(q, df=5) * (5.0 + q ** 2) / (4.0 * (1.0 - alpha))
         return float(np.sqrt(3.0 / 5.0) * es_t5)
     elif dist_name == 'laplace':
-        # Laplace(0, b): ES_alpha = b * (1 - log(2*(1-alpha))) / (1-alpha) for alpha > 0.5
+        # Laplace(0, b): ES_alpha = VaR_alpha + b = b*(1 - log(2*(1-alpha))) for alpha > 0.5
+        # (paper Section 5.2 distribution (3))
         b = 1.0 / np.sqrt(2.0)
-        return float(b * (1.0 - np.log(2.0 * (1.0 - alpha))) / (1.0 - alpha))
+        return float(b * (1.0 - np.log(2.0 * (1.0 - alpha))))
     elif dist_name == 'bimodal':
         # Numerical
         n_mc = 10_000_000

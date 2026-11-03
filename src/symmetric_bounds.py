@@ -198,6 +198,16 @@ def worst_case_es_symmetric(
     """
     assert alpha > 0.5, "Corollary 3.1(i) requires alpha > 1/2"
     eps0, sigma0 = feasibility_threshold(quantile_fn, mu_F, sigma_F, mu, sigma, n)
+
+    # For eps=0 check feasibility before the general guard: eps0 is analytically 0
+    # for symmetric references but numerical quadrature gives eps0 ≈ 3e-4.
+    if eps < 1e-10:
+        if eps0 < 1e-3:  # symmetric reference (eps0 analytically 0)
+            u_ref = _quad_grid(10000)
+            q_ref = _safe_q(quantile_fn, u_ref)
+            return float(np.mean(q_ref[u_ref > alpha]))
+        return None  # infeasible at eps=0 for asymmetric references
+
     if eps < eps0 - 1e-12:
         return None  # infeasible
 
@@ -404,6 +414,15 @@ def worst_case_rvar_symmetric(
     """
     assert alpha >= 0.5 and beta < 1.0 and alpha < beta
     eps0, sigma0 = feasibility_threshold(quantile_fn, mu_F, sigma_F, mu, sigma, n)
+
+    if eps < 1e-10:
+        if eps0 < 1e-3:  # symmetric reference (eps0 analytically 0)
+            u_ref = _quad_grid(10000)
+            q_ref = _safe_q(quantile_fn, u_ref)
+            mask = (u_ref > alpha) & (u_ref < beta)
+            return float(np.mean(q_ref[mask])) if np.any(mask) else None
+        return None
+
     if eps < eps0 - 1e-12:
         return None
 
@@ -606,9 +625,9 @@ def _var_b_lambda(
     mask4 = (u < a) | (u > 1.0 - a)  # extremes: u < 1-alpha or u > alpha
     # By antisymmetry, for u < 1/2 we use -deriv(1-u)
 
-    deriv[mask1] = lam * antisym[u[mask1]]
+    deriv[mask1] = lam * antisym[mask1]
     deriv[mask2] = m_plus
-    deriv[mask3] = lam * antisym[u[mask3]]
+    deriv[mask3] = lam * antisym[mask3]
 
     # Antisymmetry: for u < 0.5, deriv[u] = -deriv[1-u]
     u_lower = u < 0.5
@@ -640,6 +659,12 @@ def worst_case_var_symmetric(
     """
     assert alpha > 0.5
     eps0, sigma0 = feasibility_threshold(quantile_fn, mu_F, sigma_F, mu, sigma, n)
+
+    if eps < 1e-10:
+        if eps0 < 1e-3:  # symmetric reference (eps0 analytically 0)
+            return float(quantile_fn(alpha))
+        return None
+
     if eps < eps0 - 1e-12:
         return None
 

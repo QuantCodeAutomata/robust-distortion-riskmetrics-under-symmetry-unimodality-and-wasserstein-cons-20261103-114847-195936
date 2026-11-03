@@ -71,9 +71,11 @@ def _es_weights(u: np.ndarray, alpha: float, du: float) -> np.ndarray:
 
 def _rvar_weights(u: np.ndarray, alpha: float, beta: float, du: float) -> np.ndarray:
     """
-    Objective weights for RVaR_{alpha,beta}: w(u) = 1/(beta-alpha) for u in (1-beta, 1-alpha).
+    Objective weights for RVaR_{alpha,beta}: w(u) = g'(1-u) = 1/(beta-alpha) for u in (alpha, beta).
+    For RVaR distortion g'(t)=1/(beta-alpha) for t in (1-beta,1-alpha), so g'(1-u) is nonzero
+    for 1-u in (1-beta,1-alpha), i.e. u in (alpha,beta).  # paper Eq. 39 objective
     """
-    w = np.where((u > 1.0 - beta) & (u < 1.0 - alpha), 1.0 / (beta - alpha), 0.0)
+    w = np.where((u > alpha) & (u < beta), 1.0 / (beta - alpha), 0.0)
     return w * du
 
 
@@ -254,6 +256,25 @@ def worst_case_socp(
     float or None
         Worst-case value, or None if infeasible.
     """
+    # At eps=0 the Wasserstein constraint forces H = F; return riskmetric of F directly.
+    # The SOCP is numerically unstable when the constraint is exactly tight at eps=0.
+    if eps < 1e-10:
+        u_ref = _uniform_grid(10000)
+        F_ref = quantile_fn(np.clip(u_ref, 1e-10, 1.0 - 1e-10))
+        if kind in ("symmetric", "sym_unimodal"):
+            # Feasible only if reference is symmetric (sigma_0 ≈ sigma_F; paper Lemma 3.1)
+            F_flip = quantile_fn(np.clip(1.0 - u_ref, 1e-10, 1.0 - 1e-10))
+            sigma0_sq = float(np.mean(((F_ref - F_flip) / 2.0) ** 2))
+            if sigma0_sq < sigma ** 2 - 1e-3:
+                return None
+        if risk_measure == "ES":
+            return float(np.mean(F_ref[u_ref > alpha]))
+        elif risk_measure == "RVaR":
+            mask = (u_ref > alpha) & (u_ref < beta)
+            return float(np.mean(F_ref[mask])) if np.any(mask) else None
+        else:  # VaR
+            return float(quantile_fn(alpha))
+
     u = _uniform_grid(n)
     du = 1.0 / n
     F_inv = quantile_fn(np.clip(u, 1e-10, 1.0 - 1e-10))

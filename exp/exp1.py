@@ -44,6 +44,11 @@ from src.reference_distributions import (
     REFERENCE_DISTRIBUTIONS, compute_moments,
 )
 from src.socp_bounds import worst_case_socp
+from src.symmetric_bounds import (          # Corollaries 3.1–3.3
+    worst_case_es_symmetric,
+    worst_case_rvar_symmetric,
+    worst_case_var_symmetric,
+)
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -95,20 +100,35 @@ def compute_bounds(
 
         for cls_name, _ in classes:
             for eps in eps_grid:
-                val = worst_case_socp(
-                    quantile_fn=q_fn,
-                    eps=float(eps),
-                    risk_measure=risk_measure,
-                    kind=cls_name,
-                    mu=MU,
-                    sigma=SIGMA,
-                    mu_F=mu_F,
-                    sigma_F=sigma_F,
-                    alpha=ES_ALPHA if risk_measure != "VaR" else VAR_ALPHA,
-                    beta=RVAR_BETA,
-                    n=n_socp,
-                )
-                results[ref_name][cls_name][float(eps)] = val
+                eps_f = float(eps)
+                if cls_name == "symmetric":
+                    # Analytical: Corollaries 3.1–3.3 (paper p. 11–15)
+                    if risk_measure == "ES":
+                        val = worst_case_es_symmetric(
+                            q_fn, eps_f, ES_ALPHA, MU, SIGMA, mu_F, sigma_F)
+                    elif risk_measure == "RVaR":
+                        val = worst_case_rvar_symmetric(
+                            q_fn, eps_f, RVAR_ALPHA, RVAR_BETA,
+                            MU, SIGMA, mu_F, sigma_F)
+                    else:  # VaR
+                        val = worst_case_var_symmetric(
+                            q_fn, eps_f, VAR_ALPHA, MU, SIGMA, mu_F, sigma_F)
+                else:
+                    # SOCP (paper Eq. 39) for general, unimodal, sym_unimodal
+                    val = worst_case_socp(
+                        quantile_fn=q_fn,
+                        eps=eps_f,
+                        risk_measure=risk_measure,
+                        kind=cls_name,
+                        mu=MU,
+                        sigma=SIGMA,
+                        mu_F=mu_F,
+                        sigma_F=sigma_F,
+                        alpha=ES_ALPHA if risk_measure != "VaR" else VAR_ALPHA,
+                        beta=RVAR_BETA,
+                        n=n_socp,
+                    )
+                results[ref_name][cls_name][eps_f] = val
                 done += 1
                 if done % 20 == 0 or done == total_calls:
                     elapsed = time.time() - t0
