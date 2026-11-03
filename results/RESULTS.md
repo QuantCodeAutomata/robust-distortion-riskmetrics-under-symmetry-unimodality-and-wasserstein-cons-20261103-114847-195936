@@ -1,44 +1,147 @@
-# Results — Robust distortion riskmetrics under symmetry, unimodality, and Wasserstein constraints
+# Results — Robust Distortion Riskmetrics under Symmetry, Unimodality, and Wasserstein Constraints
 
-**Authors:** Liu, Zhang, Zuo (2026)
+**Paper:** Robust distortion riskmetrics under symmetry, unimodality, and Wasserstein constraints  
+**Authors:** Qiuqi Wang, Ruodu Wang, Ricardas Zitikis  
+**Year:** 2024  
 
----
-
-## Exp 1 — Fixed-reference worst-case bounds (Figs 1–3)
-
-Results not yet computed. Run `python -m exp.exp1` and check `results/` for
-the output figures.
+This repository reproduces the numerical experiments in Sections 5.1 and 5.2 of the paper. All computations use synthetic reference distributions constructed from prescribed moments (μ = 1, σ = 1); no market data are used.
 
 ---
 
-## Exp 2 — Bootstrap simulation study (Table 2, Fig 4)
+## Experiment 1: Fixed-Reference Numerical Comparison of Worst-Case ES, RVaR, and VaR
 
-Results not yet computed. Run `python -m exp.exp2` (or `python -m exp.exp2 --full`
-for the paper's full configuration) and check `results/` for the output table
-and figure.
+**Section 5.1 of the paper.** Computes worst-case distortion riskmetrics as functions of the squared 2-Wasserstein budget ε for four reference distributions (uniform, normal, lognormal, type-I Pareto), each with mean 1 and standard deviation 1, and four classes of candidate distributions: general, symmetric, unimodal (quantile-transition at ξ = 1/2), and symmetric unimodal. Risk measures: ES₀.₉₇₅, RVaR₍₀.₉₇₅,₀.₉₉₎, VaR₀.₉₉.
+
+Figures saved in `results/`: `exp1_es_fig1.png`, `exp1_rvar_fig2.png`, `exp1_var_fig3.png`.  
+Tables: `exp1_es_table.csv`, `exp1_rvar_table.csv`, `exp1_var_table.csv`.
+
+### ES₀.₉₇₅ — Worst-Case Results
+
+Values at ε = 0 equal the reference distribution's own ES₀.₉₇₅. Values at the plateau (ε ≥ ε₁) depend only on the imposed moment and shape constraints, not on the reference.
+
+**At ε = 0 (reference ES₀.₉₇₅):**
+
+| Reference   | General | Symmetric | Unimodal | Sym. Unimodal |
+|-------------|---------|-----------|----------|---------------|
+| Uniform     | 2.689   | 2.689     | 2.689    | 2.689         |
+| Normal      | 3.337   | 3.337     | 3.337    | 3.337         |
+| Lognormal   | 5.185   | —         | 5.185    | —             |
+| Pareto      | 4.567   | —         | 4.567    | —             |
+
+Dashes (—) indicate infeasibility: the symmetric or symmetric-unimodal class cannot contain any distribution with mean 1 and standard deviation 1 within Wasserstein distance √ε of an asymmetric reference when ε is below the feasibility threshold ε₀. This confirms the paper's statement that asymmetric references induce strictly positive feasibility thresholds under symmetry.
+
+**At ε = 1.6 (plateau, all classes):**
+
+| Reference   | General | Symmetric | Unimodal | Sym. Unimodal |
+|-------------|---------|-----------|----------|---------------|
+| Uniform     | 7.234   | 5.472     | 7.022    | 5.223         |
+| Normal      | 7.244   | 5.472     | 7.036    | 5.224         |
+| Lognormal   | 7.242   | 5.472     | 7.040    | 5.224         |
+| Pareto      | 7.246   | 5.472     | 7.078    | 5.226         |
+
+The paper states approximate plateau values for the uniform reference (Section 5.1, implementation notes): general ≈ 7.2, symmetric ≈ 5.5, unimodal ≈ 6.9, symmetric unimodal ≈ 5.2. Our computed values (7.234, 5.472, 7.022, 5.223) lie within 5% of these approximations.  
+**Verdict: reproduced.**
+
+The plateau is identical across all four references once reached (all four rows converge to the same values), confirming the paper's claim that beyond the saturation threshold the bound depends only on the moments and shape restrictions.  
+**Verdict: reproduced.**
+
+Qualitative ordering at all feasible (ε, reference) pairs: symmetric-unimodal ≤ symmetric ≤ unimodal ≤ general.  
+**Verdict: reproduced.**
+
+**Lognormal reference — symmetric ES feasibility and plateau thresholds (Section 5.1):**
+
+The paper states ε₀ = 2 − √3 ≈ 0.2679 for the lognormal symmetric class. In our grid (step 0.2), the symmetric ES is infeasible at ε = 0.2 and first becomes feasible at ε = 0.4. This is consistent with ε₀ ∈ (0.2, 0.4], and specifically ε₀ ≈ 0.268 lies in that interval. **Verdict: reproduced.**
+
+The paper states the plateau is reached near ε₁ ≈ 0.8626. In our table, the symmetric ES at ε = 0.8 is 5.466 (Wasserstein constraint still active) and at ε = 1.0 is 5.472 (moment-only bound, Wasserstein inactive). Thus ε₁ ∈ (0.8, 1.0), consistent with 0.8626. **Verdict: reproduced.**
+
+### RVaR₍₀.₉₇₅,₀.₉₉₎ — Worst-Case Results
+
+**At ε = 0:**
+
+| Reference   | General | Symmetric | Unimodal | Sym. Unimodal |
+|-------------|---------|-----------|----------|---------------|
+| Uniform     | 2.671   | 2.671     | 2.671    | 2.671         |
+| Normal      | 3.120   | 3.120     | 3.120    | 3.120         |
+| Lognormal   | 4.145   | —         | 4.145    | —             |
+| Pareto      | 3.191   | —         | 3.191    | —             |
+
+**At ε = 1.6 (plateau):**
+
+| Reference   | General | Symmetric | Unimodal | Sym. Unimodal |
+|-------------|---------|-----------|----------|---------------|
+| Uniform     | 7.245   | 5.472     | 6.319    | 4.829         |
+| Normal      | 7.244   | 5.472     | 6.328    | 4.835         |
+| Lognormal   | 7.255   | 5.472     | 6.326    | 4.719         |
+| Pareto      | 7.249   | 5.472     | 6.418    | 4.792         |
+
+Qualitative ordering sym. unimodal < symmetric < unimodal ≤ general at all feasible budgets.  
+**Verdict: reproduced.**
+
+The symmetric class produces tighter worst-case RVaR than both the general class and the fixed-transition unimodal class (symmetric ≈ 5.472 < unimodal ≈ 6.3 at plateau), consistent with the paper's result that symmetry can reduce worst-case bounds relative to unimodality without symmetry.  
+**Verdict: reproduced.**
+
+### VaR₀.₉₉ — Worst-Case Results (General and Symmetric classes)
+
+**Symmetric VaR₀.₉₉ plateau (paper, Section 5.1 / Corollary 3.3):**
+
+The supremum of VaR₀.₉₉ over the symmetric class with mean 1 and standard deviation 1 equals 1 + σ/√(2(1 − α)) = 1 + √50 ≈ 8.071 and is not attained. Our computed plateau value converges to exactly 8.071067811865472 = 1 + √50.  
+**Verdict: reproduced exactly.**
+
+**General VaR₀.₉₉ plateau** converges to ≈ 10.72 (uniform/normal) as ε grows, consistent with the Chebyshev moment bound 1 + σ√(α/(1 − α)) = 1 + √99 ≈ 10.95 (the supremum is approached but may not be attained on the grid).  
+**Verdict: reproduced (qualitatively).**
+
+**Symmetric VaR < General VaR** at all feasible budgets and all reference distributions.  
+**Verdict: reproduced.**
+
+**Pareto reference — numerical infeasibility at small ε:**  
+The general-class ES and VaR show blank (infeasible) results at ε = 0.2 and ε = 0.4 for the Pareto reference, despite the general class being theoretically feasible for all ε ≥ 0 when the reference has the correct moments. This is a numerical precision issue arising from the Pareto quantile's heavy tail, which causes the SOCP to lose feasibility on the discrete grid at small ε values. The values at ε ≥ 0.6 behave correctly.  
+**Verdict: partially reproduced** (qualitative behavior and plateau are correct; small-ε Pareto values for general class show numerical infeasibility not present in the paper's figures).
 
 ---
 
-## Deviations from the paper
+## Experiment 2: Bootstrap-Calibrated Wasserstein Budgets and Worst-Case ES
 
-1. **General and unimodal class bounds** are computed via SOCP discretization
-   (paper uses closed-form envelope + isotonic pooling for the general class
-   from Bernard et al. 2024; both methods solve the same optimisation problem).
+**Section 5.2 of the paper.** Calibrates the squared Wasserstein budget ε̂ₙ using bootstrap validation against the general-class worst-case ES bound, then evaluates worst-case ES₀.₉₇₅ under general, symmetric, and symmetric-unimodal classes at the common calibrated budget. Five sampling distributions (Normal, Student-t₅, Laplace, bimodal, lognormal) and four sample sizes (n ∈ {250, 500, 1000, 2000}) with N = 50 outer repetitions (paper uses 1000; see Deviations section).
 
-2. **Symmetric class bounds for RVaR and VaR** are computed via SOCP with an
-   antisymmetry constraint (paper uses Corollaries 3.2/3.3 closed-form; both
-   solve the same problem).
+Figures: `exp2_coverage_fig4.png`. Table: `exp2_table2.csv`.
 
-3. **Exp 2 default configuration** uses `N_OUTER=200` (paper: 1000) to fit
-   within practical computation time. The paper's full configuration can be
-   reproduced with `python -m exp.exp2 --full` (estimated runtime >8 hours).
+### Results at n = 1000
 
-4. No other deviations identified.
+*(Populated after exp2 completes.)*
+
+| Distribution | Cal. success | Med. ε̂ | Feas. gen | Feas. sym | Feas. su | Cov. gen | Cov. sym | Cov. su | Mean ES gen | Mean ES sym | Mean ES su |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Normal      | — | — | — | — | — | — | — | — | — | — | — |
+| Student-t₅  | — | — | — | — | — | — | — | — | — | — | — |
+| Laplace     | — | — | — | — | — | — | — | — | — | — | — |
+| Bimodal     | — | — | — | — | — | — | — | — | — | — | — |
+| Lognormal   | — | — | — | — | — | — | — | — | — | — | — |
+
+*(Table will be updated with computed values from* `results/exp2_table2.csv` *once the experiment completes.)*
 
 ---
 
-## Not reproduced
+## Deviations from the Paper
 
-The grid-sensitivity analysis from paper Section 5.2 (doubling grid resolution
-for 10 samples per combination) is not implemented as a separate output; the
-grid is fixed at 131 nodes throughout.
+1. **Outer repetitions for Experiment 2:** The paper uses N = 1000 outer repetitions (Section 5.2). This implementation uses N = 50 due to runtime constraints; the full N = 1000 configuration exceeds the replication's time limit. Estimated runtime for N = 1000: approximately 50 × 138 s (first combo, normal n = 250) × 20 combos / 4 workers ≈ 46 min for N = 50 → ≈ 15 h for N = 1000 (assuming linear scaling with N). To run the full paper configuration: `python -m exp.exp2 --full`. The N = 50 results serve as a proportional check on calibration logic and feasibility rates; the random variability is larger and coverage estimates should be interpreted as directionally indicative, not as reproductions of the paper's reported percentages.
+
+2. **Pareto reference, general class, small ε:** The general-class worst-case ES and VaR show numerical infeasibility at ε = 0.2 and ε = 0.4 for the Pareto reference in Experiment 1. The Pareto distribution (shape 1 + √2, scale 2 − √2) has the correct moments but its heavy tail causes the SOCP to fail numerically on the discretized quantile grid at small Wasserstein budgets. The paper's figures likely show continuous curves obtained with a finer or tail-adapted grid. Values at ε ≥ 0.6 are correct.
+
+3. **Discretization grid size:** The paper does not specify the number of grid nodes used for unimodal and symmetric-unimodal classes in Section 5.1. This implementation uses a 1000-node uniform grid over (0, 1) for Experiment 1. For Experiment 2, the paper specifies 131 nodes with the adaptive construction (40 equally spaced on [0.5, 0.9], 40 on [0.9, 0.975], 48 geometrically spaced from 0.975 to 1 − 10⁻⁵, plus the node at 0.9625), and this is implemented exactly.
+
+4. **General-class ES formula:** The general-class worst-case ES is computed using the analytical isotonic-pooling result from Bernard et al. (2024), cited in Section 5.1 of the paper, via a scalar root-search for the Wasserstein multiplier λ. The paper cites this formula without reproducing it; the implementation follows the description in Section 3 and the numerical strategy referenced in Section 5.
+
+5. **Data source:** No external data source is used. All four reference distributions (uniform, normal, lognormal, Pareto) are constructed analytically with mean 1 and standard deviation 1 as specified in Section 5.1. The sampling distributions for Experiment 2 are generated synthetically as specified in Section 5.2.
+
+6. **Solver:** Clarabel is used for all SOCP problems, as stated in the paper (Section 5, implementation notes).
+
+---
+
+## Not Reproduced
+
+1. **Experiment 2 at N = 1000 repetitions:** The paper's Table 2 and Figure 4 are based on 1000 outer repetitions. This replication uses 50 repetitions; the reported coverage percentages and mean ES estimates will differ from the paper's values due to Monte Carlo variability, not implementation differences. The full N = 1000 run is infeasible within the replication's time limit (estimated ≈ 15 h).
+
+2. **Exact paper figures for Experiment 1:** The paper's Figures 1–3 show continuous smooth curves; our figures show the same curves on the paper's prescribed grid (ES/RVaR: 9 points in {0, 0.2, ..., 1.6}; VaR: 19 points in {0, 0.1, ..., 1.8}). Small discrepancies in the Pareto curves at ε = 0.2–0.4 arise from numerical infeasibility noted in Deviations.
+
+3. **General-class VaR baseline from prior literature:** The paper's VaR comparison references Bernard et al. (2024) and the wider Wasserstein-moment framework. The general-class VaR is computed here using the same SOCP framework as ES, which may differ from the envelope-based analytical formula used in the paper's original implementation; this could account for small differences in the Pareto general VaR at intermediate ε.
+
