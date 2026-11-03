@@ -1,0 +1,59 @@
+Exp 1: SOCP grid size = 2000
+Computing ES bounds...
+  ES: 20/144 done (4s elapsed)
+  ES: 40/144 done (24s elapsed)
+  ES: 60/144 done (31s elapsed)
+  ES: 80/144 done (64s elapsed)
+  ES: 100/144 done (72s elapsed)
+  ES: 120/144 done (98s elapsed)
+/usr/local/lib/python3.12/site-packages/cvxpy/problems/problem.py:1539: UserWarning: Solution may be inaccurate. Try another solver, adjusting the solver settings, or solve with verbose=True for more information.
+  warnings.warn(
+  ES: 140/144 done (125s elapsed)
+  ES: 144/144 done (143s elapsed)
+  Saved: exp1_es_fig1.png
+Computing RVaR bounds...
+  RVaR: 20/144 done (7s elapsed)
+  RVaR: 40/144 done (103s elapsed)
+  RVaR: 60/144 done (119s elapsed)
+  RVaR: 80/144 done (185s elapsed)
+  RVaR: 100/144 done (296s elapsed)
+  RVaR: 120/144 done (358s elapsed)
+  RVaR: 140/144 done (461s elapsed)
+  RVaR: 144/144 done (494s elapsed)
+  Saved: exp1_rvar_fig2.png
+Computing VaR bounds...
+  VaR: 20/152 done (13s elapsed)
+  VaR: 40/152 done (14s elapsed)
+  VaR: 60/152 done (26s elapsed)
+  VaR: 80/152 done (30s elapsed)
+  VaR: 100/152 done (35s elapsed)
+  VaR: 120/152 done (44s elapsed)
+  VaR: 140/152 done (49s elapsed)
+  VaR: 152/152 done (49s elapsed)
+  Saved: exp1_var_fig3.png
+
+--- ES_{0.975} for Uniform reference (comparison with paper Fig. 1(a)) ---
+ eps  general  symmetric  unimodal  sym_unimodal
+0.00     2.69       2.69      2.69          2.69
+0.20     5.14       4.32      5.04          4.28
+0.40     5.95       4.84      5.84          4.76
+0.60     6.46       5.14      6.35          5.05
+0.80     6.82       5.33      6.68          5.22
+1.00     7.05       5.43      6.89          5.29
+1.20     7.18       5.47      7.00          5.34
+1.40     7.23       5.47      6.98          5.23
+1.60     7.23       5.47      7.02          5.22
+
+--- RVaR_{(0.975, 0.99)} for Uniform reference ---
+ eps  general  symmetric  unimodal  sym_unimodal
+0.00     2.67       2.67      2.67          2.67
+0.20     5.16       4.32      4.96          4.11
+0.40     5.96       4.84      5.74          4.55
+0.60     6.49       5.14      6.19          4.66
+0.80     6.83       5.33      6.42          4.77
+1.00     7.07       5.43      6.43          4.77
+1.20     7.18       5.47      6.32          4.83
+1.40     7.26       5.47      6.41          4.83
+1.60     7.25       5.47      6.32          4.83
+
+Exp 1 complete. Results saved to results/

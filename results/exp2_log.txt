@@ -1,0 +1,64 @@
+nohup: ignoring input
+Exp 2: n_outer=50, n_bootstrap=500, alpha=0.975
+  Distributions: ['normal', 't5', 'laplace', 'bimodal', 'lognormal']
+  Sample sizes: [250, 500, 1000, 2000]
+  Population ES_0.975(normal) = 2.3378
+  Population ES_0.975(t5) = 2.7278
+  Population ES_0.975(laplace) = 2.8254
+  Population ES_0.975(bimodal) = 1.8166
+  Population ES_0.975(lognormal) = 4.3762
+
+  Running normal, n=250 ... done in 138s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running normal, n=500 ... done in 135s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running normal, n=1000 ... done in 138s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running normal, n=2000 ... done in 132s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running t5, n=250 ... done in 139s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running t5, n=500 ... done in 143s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running t5, n=1000 ... done in 148s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running t5, n=2000 ... done in 160s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running laplace, n=250 ... done in 139s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running laplace, n=500 ... done in 141s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running laplace, n=1000 ... done in 148s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running laplace, n=2000 ... done in 160s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running bimodal, n=250 ... done in 139s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running bimodal, n=500 ... done in 133s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running bimodal, n=1000 ... done in 131s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running bimodal, n=2000 ... done in 161s | cal=100.00% | feas_gen=100.00% | feas_sym=100.00% | cov_gen=100.00% | cov_sym=100.00%
+
+  Running lognormal, n=250 ... done in 67s | cal=84.00% | feas_gen=100.00% | feas_sym=57.14% | cov_gen=84.00% | cov_sym=42.00%
+
+  Running lognormal, n=500 ... done in 30s | cal=92.00% | feas_gen=100.00% | feas_sym=4.35% | cov_gen=92.00% | cov_sym=4.00%
+
+  Running lognormal, n=1000 ... done in 32s | cal=98.00% | feas_gen=100.00% | feas_sym=4.08% | cov_gen=98.00% | cov_sym=4.00%
+
+  Running lognormal, n=2000 ... done in 39s | cal=100.00% | feas_gen=100.00% | feas_sym=0.00% | cov_gen=100.00% | cov_sym=0.00%
+
+Total simulation time: 2454s
+  Saved: exp2_raw_results.csv (1000 rows)
+  Saved: exp2_summary_table.csv
+
+--- Table 2 (n=1000) ---
+     Distribution    n Cal. rate Median ε̂ Feas. Gen. Feas. Sym. Feas. SU Cov. Gen. Cov. Sym. Cov. SU WC-ES Gen. WC-ES Sym. WC-ES SU  N rep.
+           Normal 1000     1.000    1.1078      1.000      1.000    1.000     1.000     1.000   1.000     5.0683     4.4365   4.2757      50
+$\sqrt{3/5}\,T_5$ 1000     1.000    1.0958      1.000      1.000    1.000     1.000     1.000   1.000     5.3965     4.7021   4.6718      50
+          Laplace 1000     1.000    1.1098      1.000      1.000    1.000     1.000     1.000   1.000     5.4600     4.7718   4.5459      50
+          Bimodal 1000     1.000    1.1096      1.000      1.000    1.000     1.000     1.000   1.000     4.6336     4.0174   3.6720      50
+        Lognormal 1000     0.980    1.1465      1.000      0.041    0.041     0.980     0.040   0.040     7.2190     4.9469   4.9474      50
+  Saved: exp2_coverage_fig4.png
+
+Exp 2 complete. Results saved to results/
