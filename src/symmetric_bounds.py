@@ -699,18 +699,21 @@ def worst_case_var_symmetric(
         h_lam = mu + sigma * (deriv - a_lam) / b_lam
         return float(np.mean((h_lam - q_F) ** 2))
 
-    # Root-search for lambda s.t. d_W^2(F, H_lambda) = eps
-    # At lam very small: d_W^2 ≈ eps0
-    # As lam grows: d_W^2 increases toward A_F
+    # Root-search for lambda s.t. d_W^2(F, H_lambda) = eps.
+    # d_W^2 is DECREASING in lambda: at lam→0, dist = moment-only distance (max);
+    # at lam→∞, dist→0 (optimizer collapses to F). Corollary 3.3 active region.
     try:
         lam_lo, lam_hi = 1e-8, 1e3
-        for _ in range(30):
-            if wasserstein_dist_var(lam_hi) < eps:
-                lam_hi *= 2.0
+        # Expand lam_hi until dist(lam_hi) < eps (right bracket for brentq).
+        for _ in range(40):
+            if wasserstein_dist_var(lam_hi) > eps:
+                lam_hi *= 10.0
             else:
                 break
-        if wasserstein_dist_var(lam_lo) > eps:
-            return plateau  # already past plateau
+        # If dist at lam≈0 is already ≤ eps, the moment-only optimizer lies within
+        # the Wasserstein budget: constraint inactive → plateau.
+        if wasserstein_dist_var(lam_lo) <= eps:
+            return plateau
         lam_eps = brentq(lambda lam: wasserstein_dist_var(lam) - eps,
                          lam_lo, lam_hi, xtol=1e-8, maxiter=100)
     except (ValueError, RuntimeError):

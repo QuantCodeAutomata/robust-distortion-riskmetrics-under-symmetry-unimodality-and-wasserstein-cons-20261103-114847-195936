@@ -67,7 +67,7 @@ EXP2_US_GRID = _build_exp2_grid()   # 131-node upper-half grid for symmetric uni
 # Simulation parameters (Section 5.2)
 # ---------------------------------------------------------------------------
 N_OUTER_PAPER = 1000        # outer simulation repetitions in paper; paper Section 5.2
-N_OUTER_RUN = 200           # outer repetitions actually executed (runtime reduction); estimated >8 h for full
+N_OUTER_RUN = 50            # outer repetitions actually executed (runtime reduction); estimated >8 h for full
 N_BOOTSTRAP = 500           # bootstrap resamples per repetition; paper Section 5.2
 SAMPLE_SIZES = [250, 500, 1000, 2000]   # sample sizes; paper Section 5.2
 COVERAGE_QUANTILE = 0.95    # bootstrap quantile used for calibration (475th of 500); paper Section 5.2
