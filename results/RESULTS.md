@@ -170,6 +170,8 @@ Bimodal: gen=4.63, sym=4.02, su=3.67 → su < sym < gen ✓
 
 6. **Solver:** Clarabel is used for all SOCP problems, as stated in Section 5 of the paper.
 
+7. **Bootstrap calibration formula:** The general-class ES bound used to calibrate ε̂ₙ in Experiment 2 follows the closed-form analytical formula from Bernard et al. (2024) (scalar root-search for the Wasserstein multiplier λ as in Deviations item 4). The stored results show median ε̂ₙ ≈ 1.11 across distributions and sample sizes; diagnostic tests with the analytical formula on the same data yield budgets of approximately 0.008–0.02, which would place bimodal symmetric-unimodal feasibility in line with Section 5.2. The discrepancy between the stored run and the diagnostic implies the full experiment run was produced with an earlier version of the calibration routine; a full re-run with the current implementation was not feasible within the replication's time limit (see Not Reproduced item 1).
+
 ---
 
 ## Not Reproduced
